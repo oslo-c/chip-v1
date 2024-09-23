@@ -1,4 +1,4 @@
-# Chip-v1
+# Chip-v1.0
 
 This app is a commandline utility for interacting with ChatGPT, making use of the APIs provided by OpenAI. Version one consolidates all the basic functionality of the original idea into one standalone application. More features are currently in development.
 
