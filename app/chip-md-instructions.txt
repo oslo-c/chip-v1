@@ -1,10 +1,7 @@
-# Chip-v1
+Please produce a markdown file for my new Commandline Application written in python. H1 should read: Chip-v1
 
-This app is a commandline utility for interacting with ChatGPT, making use of the APIs provided by OpenAI. Version one consolidates all the basic functionality of the program into one standalone application. More features are currently in development.
+This app is a commandline utility for interacting with ChatGPT, making use of the apis provided by openai. Version one consolidates all the basic functionality of the program into one standalone application. More features are currently in development. The help instructions are as follows:
 
-## Help Instructions
-
-```
 Chip: an command line interface for querying ChatGPT on linux
 
 options:
@@ -16,4 +13,5 @@ Input Options:
 
 Output Options:
   -of , --output-file   Export query result to named file. Ex: $ Chip -q 'What is the capital of Denmark?' -of response.txt
-```
+
+
