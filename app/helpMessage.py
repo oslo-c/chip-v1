@@ -2,9 +2,11 @@ help_message ="""
 o~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~o
 |                                     Chip: A command line interface for querying ChatGPT                                       |
 o~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~o
+|       <interactive mode>    Type 'chip' and ask away, as if you were having a conversation. Active when you see 'Chip>'       |
+|                                                                                                                               |
 | Options:                                                                                                                      |
 |   -h, --help            show this help message and exit                                                                       |
-|   <interactive mode>    just type 'chip' and ask away, as if you were having a conversation. Active when you see 'Chip>'      |
+|   -v, --verbosity       Use this flag to set the max tokens for the response. One character/space = One token.                |
 |                                                                                                                               |
 | Input Options:                                                                                                                |
 |   -q , --quick          Submit question directly, surrounded by quotes. Ex: $ chip -f 'your query here'                       |
