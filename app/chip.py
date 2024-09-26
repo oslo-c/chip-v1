@@ -5,16 +5,34 @@ import argparse
 import openai
 from openai import OpenAI
 from config import get_api_key
+from helpMessage import get_help
 
 api_key = get_api_key()
 
 def get_args():
-    parser = argparse.ArgumentParser(prog = "CHIP", description = "Chip: an command line interface for querying ChatGPT on linux")
+    parser = argparse.ArgumentParser(prog = "CHIP",
+    description="Chip: an command line interface for querying ChatGPT on linux",
+    add_help=False
+    )
     
     chip_options = parser.add_argument_group("Chip Settings")
     input_options = parser.add_argument_group("Input Options")
     output_options = parser.add_argument_group("Output Options")
     
+    # Chip Options
+    chip_options.add_argument("-h",
+    "--help",
+    dest="help",
+    action="store_true",
+    )
+
+    chip_options.add_argument("-v",
+    "--verbosity",
+    dest="verbosity",
+    type=int,
+    default=100
+    )
+
     # Input Options
     input_options.add_argument("-q",
         "--quick",
@@ -46,25 +64,28 @@ def get_args():
 
     return parser.parse_args()
 
-def interactive_mode(api_key = api_key):
+def interactive_mode(verbosity, api_key = api_key, initial_input = ""):
     # Start an interactive mode where the user can continually input commands.
-    print("Interactive mode (type 'exit' to quit):")
-    
+    # print("Interactive mode (type 'exit' to quit):")
+
+    if initial_input != "":    
+        response = send_to_chatgpt(initial_input, api_key, verbosity)
+        print(response)
+
     while True:
         # Get input from the user
         user_input = input("Chip> ")
         
-        # Exit if the user types 'exit' or 'quit'
         if user_input.lower() in ['exit', 'quit']:
-            print("Exiting interactive mode.")
             break
-        
-        # Send the input to ChatGPT and display the response
-        response = send_to_chatgpt(user_input, api_key)
-        print(response)
+        else:
+            # Send the input to ChatGPT and display the response
+            response = send_to_chatgpt(user_input, api_key, verbosity)
+            print(response)
 
-def send_to_chatgpt(input, api_key, max_tokens = 1000):
-    #os.system("resetListener")
+    
+
+def send_to_chatgpt(input, api_key, verbosity): #
     try:
         client = OpenAI(api_key = api_key)
         response = client.chat.completions.create(
@@ -75,7 +96,7 @@ def send_to_chatgpt(input, api_key, max_tokens = 1000):
                     }
                 ],
             model = "gpt-3.5-turbo",  # Use the appropriate modelChatCompletion.create
-            max_tokens = max_tokens,
+            max_tokens = verbosity,
             temperature = 0.7
         )
         return response.choices[0].message.content.strip()
@@ -100,15 +121,21 @@ def output_handler(args, response):
     else:
         print(response)
 
-def main():   
-    args = get_args()
-    
-    if args.query or args.input_file:
-        response = send_to_chatgpt(input = packet_builder(args), api_key = api_key)
-        output_handler(args, response)
+def main(args):   
+    verbosity = args.verbosity
+    print("Verbosity setting: " + str(verbosity) + " tokens")
+
+    if args.help:
+        print(get_help())
+    elif args.input_file:
+        response = send_to_chatgpt(packet_builder(args), api_key, verbosity) #
+        output_handler(args, response)        
+    elif args.query:
+        interactive_mode(verbosity, initial_input=args.query)
     else:
-        interactive_mode()
+        interactive_mode(verbosity, initial_input="<Your name is chip, you are an ai help bot and I have just activated you.> Hello!")
 
 if __name__ == "__main__":
-    main()
+    args = get_args()
+    main(args)
 
