@@ -1,6 +1,6 @@
 # Chip-v1.0
 
-This app is a commandline utility for interacting with ChatGPT, making use of the APIs provided by OpenAI. Version one consolidates all the basic functionality of the original idea into one standalone application. More features are currently in development.
+This app is a commandline utility for interacting with ChatGPT, making use of the APIs provided by OpenAI. Version one consolidates all the basic functionality of the original idea into one standalone application.
 
 ## Help Instructions
 ```
@@ -21,5 +21,8 @@ o~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 |   -of , --output-file   Export query result to named file. Ex: $ Chip -q 'What is the capital of Denmark?' -of response.txt   |
 o~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~o
 ```
-
+## DevNotes:
+- Interactive mode does not currently store a chat log. Thus, each query is submitted to GPT as a standalone query.
+- I would like to remove the `-q` flag such that the user can simply type `chip <query>`
+   
 ## This program is in continued development. Check back for updates!
