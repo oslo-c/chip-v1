@@ -2,12 +2,8 @@
 
 import os
 import argparse
-import openai
-from openai import OpenAI
-from config import get_api_key
-from helpMessage import get_help
-
-api_key = get_api_key()
+from Messages import get_help
+from conversations import Conversation
 
 def get_args():
     parser = argparse.ArgumentParser(prog = "CHIP",
@@ -26,11 +22,17 @@ def get_args():
     action="store_true",
     )
 
-    chip_options.add_argument("-v",
-    "--verbosity",
-    dest="verbosity",
+    chip_options.add_argument("-t",
+    "--tokens",
+    dest="tokens",
     type=int,
     default=100
+    )
+
+    chip_options.add_argument("-m",
+    "--model",
+    dest="model",
+    default="gpt-3.5-turbo"
     )
 
     # Input Options
@@ -60,80 +62,40 @@ def get_args():
         help = "Export query result to named file. Ex: $ Chip -el -of example.txt"
         )
 
-    #verbosity options?
-
     return parser.parse_args()
-
-def interactive_mode(verbosity, api_key = api_key, initial_input = ""):
-    # Start an interactive mode where the user can continually input commands.
-    # print("Interactive mode (type 'exit' to quit):")
-
-    if initial_input != "":    
-        response = send_to_chatgpt(initial_input, api_key, verbosity)
-        print(response)
-
-    while True:
-        # Get input from the user
-        user_input = input("Chip> ")
-        
-        if user_input.lower() in ['exit', 'quit']:
-            break
-        else:
-            # Send the input to ChatGPT and display the response
-            response = send_to_chatgpt(user_input, api_key, verbosity)
-            print(response)
-
-    
-
-def send_to_chatgpt(input, api_key, verbosity): #
-    try:
-        client = OpenAI(api_key = api_key)
-        response = client.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": input
-                    }
-                ],
-            model = "gpt-3.5-turbo",  # Use the appropriate modelChatCompletion.create
-            max_tokens = verbosity,
-            temperature = 0.7
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print(f"Error: {e}")
-        sys.exit(1)
 
 def packet_builder(args):
     packet = ""
-    
     if args.query:
         packet += args.query
-    
     if args.input_file:
         packet += args.input_file.read().strip()
-    
     return packet
 
-def output_handler(args, response):
+def outfile_handler(args, response):
     if args.output_file:
         args.output_file.write(response)
     else:
         print(response)
 
-def main(args):   
-    verbosity = args.verbosity
-    print("Verbosity setting: " + str(verbosity) + " tokens")
+def main(args): 
+    tokens = args.tokens  
+    c = Conversation(tokens, args.model)
+    print("Tokens: " + str(tokens) + "  |  Model: " + args.model)
 
     if args.help:
         print(get_help())
     elif args.input_file:
-        response = send_to_chatgpt(packet_builder(args), api_key, verbosity) #
-        output_handler(args, response)        
+        response = c.send_to_chip(packet_builder(args), tokens)
+        outfile_handler(args, response)        
     elif args.query:
-        interactive_mode(verbosity, initial_input=args.query)
+        if args.output_file:
+            response = c.send_to_chip(tokens, initial_input=args.query)
+            outfile_handler(args, response)
+        else:
+            c.interactive_mode(tokens, initial_input=args.query)
     else:
-        interactive_mode(verbosity, initial_input="<Your name is chip, you are an ai help bot and I have just activated you.> Hello!")
+        c.interactive_mode(tokens)
 
 if __name__ == "__main__":
     args = get_args()
