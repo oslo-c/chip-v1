@@ -5,8 +5,9 @@ o~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 |       <interactive mode>    Type 'chip' and ask away, as if you were having a conversation. Active when you see 'Chip>'       |
 |                                                                                                                               |
 | Options:                                                                                                                      |
-|   -h, --help            show this help message and exit                                                                       |
-|   -v, --verbosity       Use this flag to set the max tokens for the response. One character/space = One token.                |
+|   -h, --help            Show this help message and exit                                                                       |
+|   -t, --tokens          Set maximum tokens for Chip's response [Default: 100]                                                 |
+|   -m, --model           Set the model to be used [Default: gpt-3.5-turbo]                                                     |
 |                                                                                                                               |
 | Input Options:                                                                                                                |
 |   -q , --quick          Submit question directly, surrounded by quotes. Ex: $ chip -f 'your query here'                       |
